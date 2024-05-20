@@ -8,15 +8,11 @@ if (isset($_GET['topic'])) {
 
 <div class="container mt-5">
   <h2>Ajouter une question</h2>
-  <form action="insert/addQuestion.php" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="topic_id" value="<?php echo $topicId; ?>">
+  <form action="insert/voirQuestion.php" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="idDomaine" value="<?php echo $topicId; ?>">
     <div class="form-group">
-      <label>Titre de la question</label>
-      <input type="text" name="title" class="form-control" placeholder="Titre de la question" required>
-    </div>
-    <div class="form-group">
-      <label>Description de la question</label>
-      <textarea name="description" class="form-control" placeholder="Description" required></textarea>
+      <label>Contenu de la question</label>
+      <input type="text" name="contenu" class="form-control" placeholder="Contenu de la question" required>
     </div>
     <div class="form-group">
       <label>Fichier/Image</label>

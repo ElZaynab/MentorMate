@@ -5,12 +5,12 @@ if (isset($_GET['topic'])) {
   $topicId = $_GET['topic'];
   require("../connexion.php");
 
-  $query = "SELECT name FROM topics WHERE id = :topicId";
+  $query = "SELECT libelle FROM domaineexpertise WHERE id = :topicId";
   $stmt = $conn->prepare($query);
   $stmt->execute([':topicId' => $topicId]);
   $topic = $stmt->fetch(PDO::FETCH_ASSOC);
 
-  $query = "SELECT * FROM questions WHERE topic_id = :topicId";
+  $query = "SELECT * FROM question WHERE idDomaine = :topicId";
   $stmt = $conn->prepare($query);
   $stmt->execute([':topicId' => $topicId]);
   $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -18,16 +18,16 @@ if (isset($_GET['topic'])) {
 ?>
 
 <div class="container mt-5">
-  <h2>Questions pour le sujet: <?php echo htmlspecialchars($topic['name']); ?></h2>
-  <button type="button" class="btn btn-primary mb-3" onclick="location.href='addQuestion.php?topic=<?php echo $topicId; ?>'">Créer une nouvelle question</button>
+  <h2>Questions pour le domaine : <?php echo htmlspecialchars($topic['libelle']); ?></h2>
+  <button type="button" class="btn btn-primary mb-3" onclick="location.href='ajouterQuestion.php?topic=<?php echo $topicId; ?>'">Créer une nouvelle question</button>
   <ul class="list-group">
     <?php
     if ($questions) {
       foreach ($questions as $question) {
-        echo "<li class='list-group-item'>" . htmlspecialchars($question['title']) . "</li>";
+        echo "<li class='list-group-item'>" . htmlspecialchars($question['contenu']) . "</li>";
       }
     } else {
-      echo "<li class='list-group-item'>Aucune question trouvée pour ce sujet.</li>";
+      echo "<li class='list-group-item'>Aucune question trouvée pour ce domaine.</li>";
     }
     ?>
   </ul>

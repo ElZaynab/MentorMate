@@ -1,28 +1,25 @@
 <?php
-require("../../connexion.php");
+require("../connexion.php");
 
 if (isset($_POST['insertQuestion'])) {
-  $title = $_POST['title'];
-  $description = $_POST['description'];
-  $topicId = $_POST['topic_id'];
-  
-  $file = $_FILES['file'];
-  $fileName = $file['name'];
-  $fileTmpName = $file['tmp_name'];
-  $fileDestination = 'uploads/' . $fileName;
-  
-  if (move_uploaded_file($fileTmpName, $fileDestination)) {
-    $query = "INSERT INTO questions (title, description, file, topic_id) VALUES (:title, :description, :file, :topicId)";
-    $stmt = $conn->prepare($query);
-    $stmt->execute([
-      ':title' => $title,
-      ':description' => $description,
-      ':file' => $fileName,
-      ':topicId' => $topicId
-    ]);
-    header("Location: ../viewQuestions.php?topic=" . $topicId);
-  } else {
-    echo "Erreur lors du téléchargement du fichier.";
+  $idDomaine = $_POST['idDomaine'];
+  $contenu = $_POST['contenu'];
+  $file = '';
+
+  if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
+    $file = 'uploads/' . basename($_FILES['file']['name']);
+    move_uploaded_file($_FILES['file']['tmp_name'], $file);
   }
+
+  $query = "INSERT INTO question (idDomaine, contenu, date, file) VALUES (:idDomaine, :contenu, NOW(), :file)";
+  $stmt = $conn->prepare($query);
+  $stmt->execute([
+    ':idDomaine' => $idDomaine,
+    ':contenu' => $contenu,
+    ':file' => $file
+  ]);
+
+  header("Location: ../voirQuestion.php?topic=" . $idDomaine);
+  exit();
 }
 ?>
