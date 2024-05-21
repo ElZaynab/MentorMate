@@ -1,25 +1,35 @@
 <?php
-require("../connexion.php");
+session_start();
+/*if (!isset($_SESSION['nomAmin'])) {
+    header("Location: ../index.php");
+    exit();
+}*/
 
-if (isset($_POST['insertQuestion'])) {
-  $idDomaine = $_POST['idDomaine'];
-  $contenu = $_POST['contenu'];
-  $file = '';
+require("../../connexion.php");
 
-  if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
-    $file = 'uploads/' . basename($_FILES['file']['name']);
-    move_uploaded_file($_FILES['file']['tmp_name'], $file);
-  }
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['insertQuestion'])) {
+    $contenu = $_POST['contenu'];
+    $idDomaine = $_POST['idDomaine'];
+    $date = date('Y-m-d H:i:s');
+    $filePath = '';
 
-  $query = "INSERT INTO question (idDomaine, contenu, date, file) VALUES (:idDomaine, :contenu, NOW(), :file)";
-  $stmt = $conn->prepare($query);
-  $stmt->execute([
-    ':idDomaine' => $idDomaine,
-    ':contenu' => $contenu,
-    ':file' => $file
-  ]);
+    // Gestion du fichier uploadé
+    if (isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
+        $fileName = basename($_FILES['file']['name']);
+        $filePath = 'uploads/' . $fileName;
+        move_uploaded_file($_FILES['file']['tmp_name'], $filePath);
+    }
 
-  header("Location: ../voirQuestion.php?topic=" . $idDomaine);
-  exit();
+    // Insertion de la question dans la base de données
+    $query = "INSERT INTO question (idDomaine, contenu, date, file) VALUES (:idDomaine, :contenu, :date, :file)";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([':idDomaine' => $idDomaine, ':contenu' => $contenu, ':date' => $date, ':file' => $filePath]);
+
+    // Récupération de l'ID de la question insérée
+    $questionId = $conn->lastInsertId();
+
+    // Redirection vers la page d'affichage de la question
+    header("Location: ../afficherQuestion.php?id=$questionId");
+    exit();
 }
 ?>

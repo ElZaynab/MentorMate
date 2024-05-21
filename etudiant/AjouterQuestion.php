@@ -8,7 +8,7 @@ if (isset($_GET['topic'])) {
 
 <div class="container mt-5">
   <h2>Ajouter une question</h2>
-  <form action="insert/voirQuestion.php" method="post" enctype="multipart/form-data">
+  <form action="insert/ajouterQuestion.php" method="post" enctype="multipart/form-data">
     <input type="hidden" name="idDomaine" value="<?php echo $topicId; ?>">
     <div class="form-group">
       <label>Contenu de la question</label>

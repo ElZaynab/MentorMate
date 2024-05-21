@@ -1,11 +1,12 @@
 <?php
 session_start();
+/*
 if (isset($_SESSION['nomEtudiant'])) {
     $username = $_SESSION['nomEtudiant'];
 } else {
     header("Location: ../index.php");
     exit();
-}
+}*/
 ?>
 
 <?php include '../include/header.php'; ?>
