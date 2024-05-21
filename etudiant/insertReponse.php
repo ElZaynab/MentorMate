@@ -1,9 +1,9 @@
 <?php
 session_start();
-if (!isset($_SESSION['nomAmin'])) {
+/**if (!isset($_SESSION['nomAmin'])) {
     header("Location: ../index.php");
     exit();
-}
+}*/
 
 require("../connexion.php");
 
